@@ -28,10 +28,10 @@ class Window:
 
 def main():
     win = Window(800, 600)
-    cell = Cell(win, 50,50,100,100)
-    cell_2 = Cell(win,150,150,200,200)
-    cell.draw()
-    cell_2.draw()
+    cell = Cell(win)
+    cell_2 = Cell(win)
+    cell.draw(150,150,200,200)
+    cell_2.draw(50,50,100,100)
     cell.draw_move(cell_2)
     win.wait_for_close()
 
