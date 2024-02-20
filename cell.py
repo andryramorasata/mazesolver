@@ -3,7 +3,7 @@ from geometry import Point, Line
 class Cell:
     def __init__(
         self,
-        win,
+        win=None,
         has_left_wall=True,
         has_right_wall=True,
         has_top_wall=True,
@@ -20,6 +20,8 @@ class Cell:
         self.__win = win
 
     def draw(self, x1, y1, x2, y2):
+        if self.win is None:
+            return
         self.__x1 = x1
         self.__x2 = x2
         self.__y1 = y1
