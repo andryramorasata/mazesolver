@@ -29,7 +29,7 @@ class Window:
 
 def main():
     win = Window(800, 600)
-    maze = Maze(20, 20, 10, 10, 78, 58, win)
+    maze = Maze(20, 20, 8, 8, 78, 58, win, 7)
     win.wait_for_close()
-
-main()
+if __name__ == "__main__":
+    main()
