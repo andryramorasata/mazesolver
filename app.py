@@ -30,6 +30,7 @@ class Window:
 def main():
     win = Window(800, 600)
     maze = Maze(20, 20, 8, 8, 78, 58, win, 7)
+    maze.solve()
     win.wait_for_close()
 if __name__ == "__main__":
     main()

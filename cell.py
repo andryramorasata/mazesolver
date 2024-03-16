@@ -21,7 +21,7 @@ class Cell:
         self.visited = False
 
     def draw(self, x1, y1, x2, y2):
-        if self.win is None:
+        if self.__win is None:
             return
         self.__x1 = x1
         self.__x2 = x2

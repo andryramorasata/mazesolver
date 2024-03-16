@@ -23,7 +23,7 @@ class Maze:
         self.win = win
         self.seed = seed
         self.__create_cells()
-        random.seed(seed)
+        #random.seed(seed)
         if num_cols > 0 and num_rows > 0:
             self._break_walls_r(random.randrange(0,num_cols-1),random.randrange(0,num_rows-1))
         self._reset_cells_visited()
@@ -73,7 +73,6 @@ class Maze:
             adjacent_cells.append((i, j-1))
         if j + 1 < self.num_rows and not self._cells[i][j+1].visited:
             adjacent_cells.append((i, j+1))
-        print(f"i: {i}, j: {j} | adj_cells: {adjacent_cells}")
         return adjacent_cells
 
     def _break_walls_r(self,i,j):
@@ -117,5 +116,63 @@ class Maze:
             for j in range(self.num_rows):
                 self._cells[i][j].visited = False
 
+    def _solve_r(self,i,j):
+        self.__animate()
+        self._cells[i][j].visited = True
+        
+        if i == (self.num_cols - 1) and j == (self.num_rows - 1):
+            return True
+        for adjacent_cell in self._get_adjacent_cells(i,j):
+            is_same_col = (i == adjacent_cell[0]) 
+            is_same_row = (j == adjacent_cell[1])
+            is_next_cell_down = (j < adjacent_cell[1])
+            is_next_cell_right = (i < adjacent_cell[0])
+            if (
+                    is_same_row and 
+                    is_next_cell_right and not
+                    self._cells[adjacent_cell[0]][adjacent_cell[1]].has_left_wall
+                ):
+                self._cells[i][j].draw_move(self._cells[adjacent_cell[0]][adjacent_cell[1]])
+                if self._solve_r(adjacent_cell[0], adjacent_cell[1]):
+                    return True
+                else:
+                    self._cells[i][j].draw_move(self._cells[adjacent_cell[0]][adjacent_cell[1]],True)
 
+            elif (
+                    is_same_row and not 
+                    is_next_cell_right and not
+                    self._cells[adjacent_cell[0]][adjacent_cell[1]].has_right_wall
+                ):
+                self._cells[i][j].draw_move(self._cells[adjacent_cell[0]][adjacent_cell[1]])
+                if self._solve_r(adjacent_cell[0], adjacent_cell[1]):
+                    return True
+                else:
+                    self._cells[i][j].draw_move(self._cells[adjacent_cell[0]][adjacent_cell[1]],True)
+ 
+            elif (
+                    is_same_col and 
+                    is_next_cell_down and not
+                    self._cells[adjacent_cell[0]][adjacent_cell[1]].has_top_wall
+                    
+                ):
+                self._cells[i][j].draw_move(self._cells[adjacent_cell[0]][adjacent_cell[1]])
+                if self._solve_r(adjacent_cell[0], adjacent_cell[1]):
+                    return True
+                else:
+                    self._cells[i][j].draw_move(self._cells[adjacent_cell[0]][adjacent_cell[1]],True)
 
+            elif(
+                    is_same_col and not
+                    is_next_cell_down and not
+                    self._cells[adjacent_cell[0]][adjacent_cell[1]].has_bottom_wall
+                ):
+                self._cells[i][j].draw_move(self._cells[adjacent_cell[0]][adjacent_cell[1]])
+                if self._solve_r(adjacent_cell[0], adjacent_cell[1]):
+                    return True
+                else:
+                    self._cells[i][j].draw_move(self._cells[adjacent_cell[0]][adjacent_cell[1]],True)
+
+        return False
+
+    def solve(self):
+        return  self._solve_r(0,0)
